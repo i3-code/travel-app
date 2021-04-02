@@ -63,7 +63,9 @@ export default function Country() {
   const loadInfo = (CountryInfo, sightsInfo) => {
     setCountry(CountryInfo);
     setSights(sightsInfo);
-    const sightsCoop = sightsInfo.map(el => sightsCoop.push({'coordinates': el.сoordinates, 'name': el.name}));
+    const sightsCoop = sightsInfo.map(el => {
+      return {'coordinates': el.сoordinates, 'name': el.name}
+    });
     setSightsCoordinates(sightsCoop);
     setLoading(false);
   }

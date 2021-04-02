@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Grid } from '@material-ui/core';
 import axios from 'axios';
 
@@ -31,15 +30,28 @@ export default function Country() {
   } = useTranslation();
   const classes = useStyles();
 
+  const filterCountries = useCallback((countryList) =>
+    setFilteredCountries(
+      countryList.filter(
+        (country) =>
+          country.name.toLowerCase().includes(searchValue) || country.capital.toLowerCase().includes(searchValue),
+      ),
+  ), [searchValue]);
+
+  const setNewTranslatedCountries = useCallback((data) => {
+    const newTranslatedCountries = data.map((country) => getTranslatedCountry(country, language));
+    setTranslatedCountries(newTranslatedCountries);
+    filterCountries(newTranslatedCountries);
+  }, [filterCountries, language]);
+
+
   useEffect(() => {
     const getCountryData = async () => {
       setIsPending(true);
       try {
         const response = await axios.get(urls.countries.all);
+        setNewTranslatedCountries(response.data);
         setCountries(response.data);
-        const newTranslatedCountries = response.data.map((country) => getTranslatedCountry(country, language));
-        setTranslatedCountries(newTranslatedCountries);
-        filterCountries(newTranslatedCountries);
       } catch (err) {
         console.log(err);
       } finally {
@@ -47,25 +59,15 @@ export default function Country() {
       }
     };
     getCountryData();
-  }, []);
+  }, [setNewTranslatedCountries]);
 
   useEffect(() => {
-    const newTranslatedCountries = countries.map((country) => getTranslatedCountry(country, language));
-    setTranslatedCountries(newTranslatedCountries);
-    filterCountries(newTranslatedCountries);
-  }, [language, countries]);
+    setNewTranslatedCountries(countries);
+  }, [countries, setNewTranslatedCountries]);
 
   useEffect(() => {
     filterCountries(translatedCountries);
-  }, [searchValue]);
-
-  const filterCountries = (countryList) =>
-    setFilteredCountries(
-      countryList.filter(
-        (country) =>
-          country.name.toLowerCase().includes(searchValue) || country.capital.toLowerCase().includes(searchValue),
-      ),
-    );
+  }, [filterCountries, translatedCountries]);
 
   return (
     <Grid container direction="column" justify="space-between" alignItems="stretch">
