@@ -21,13 +21,15 @@ import Currency from '../widgets/Currency';
 import DateWidget from '../widgets/Date';
 import Weather from '../widgets/Weather';
 
+import { DEFAULT_APP_LANG } from '../../constants/languages';
+
 const [countryCache, sightsCache] = [{}, {}];
 
 function getCountryInfo(data, language) {
   const key = data.code || 'key';
   if (!countryCache[key]) countryCache[key] = data;
   let result = countryCache[key];
-  if (language !== 'en-US') {
+  if (language !== DEFAULT_APP_LANG) {
     const dataPatch = result.translations ? result.translations[language.slice(0, 2)] : {};
     result = { ...result, ...dataPatch };
   }
@@ -37,7 +39,7 @@ function getCountryInfo(data, language) {
 function getSightsInfo(key, data, language) {
   if (!sightsCache[key]) sightsCache[key] = data || [];
   let result = sightsCache[key];
-  if (language && language !== 'en-US') {
+  if (language && language !== DEFAULT_APP_LANG) {
     const lang = language.slice(0, 2);
     result = result.map((sight) => {
       const dataPatch = sight.translations ? sight.translations[lang] : {};
@@ -61,8 +63,7 @@ export default function Country() {
   const loadInfo = (CountryInfo, sightsInfo) => {
     setCountry(CountryInfo);
     setSights(sightsInfo);
-    let sightsCoop=[];
-    sightsInfo.forEach(el=> sightsCoop.push({'coordinates': el.сoordinates, 'name': el.name}));
+    const sightsCoop = sightsInfo.map(el => sightsCoop.push({'coordinates': el.сoordinates, 'name': el.name}));
     setSightsCoordinates(sightsCoop);
     setLoading(false);
   }
@@ -72,7 +73,7 @@ export default function Country() {
       axios
       .get(urls.countries.byCode(code))
       .then((response) => {
-        let result = response.data || {};
+        const result = response.data || {};
         const CountryInfo = getCountryInfo(result, language);
         const sightsInfo = getSightsInfo(code, CountryInfo.sights, language);
         loadInfo(CountryInfo, sightsInfo);
