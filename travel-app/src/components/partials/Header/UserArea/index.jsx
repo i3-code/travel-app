@@ -6,6 +6,8 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import UserLogged from './UserLogged';
 
+import { USER_STATE } from '../../../../constants/userpanel';
+
 import { UserContext } from '../../../../contexts/UserContext';
 import useStyles from './styles';
 import { AuthService } from '../../../../services/auth.service';
@@ -20,7 +22,7 @@ const UserPanel = ({ type, ...props }) => {
 
 export default function UserArea({closeMenu}) {
   const [user, setUser] = useContext(UserContext);
-  const panelType = (user) ? 'userLogged' : 'signIn';
+  const panelType = (user) ? USER_STATE.userLogged : USER_STATE.signIn;
   const [type, setType] = useState(panelType);
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
   const classes = useStyles();
@@ -41,8 +43,7 @@ export default function UserArea({closeMenu}) {
       }
     };
     checkAuthorization();
-    //eslint-disable-next-line
-  }, []);
+  }, [setUser]);
 
   const handleLogout = () => {
     AuthService.logout();

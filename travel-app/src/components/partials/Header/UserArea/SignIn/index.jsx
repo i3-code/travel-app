@@ -15,6 +15,8 @@ import { AuthService } from '../../../../../services/auth.service';
 
 import { useTranslation } from 'react-i18next';
 
+import { USER_STATE } from '../../../../../constants/userpanel';
+
 import useStyles from './styles';
 
 export default function SignIn({ callBack, onClose, onSignIn }) {
@@ -27,7 +29,7 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
 
   useEffect(() => {
     AuthService.setRememberMe(false)
-  }, [])
+  }, []);
 
   const handleChangeCredentials = (e) => {
     const { name, value } = e.target;
@@ -95,7 +97,7 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
           </Button>
           <Grid container justify="center">
             <Grid item>
-              <Link variant="body2" className={classes.interactive} onClick={callBack('signUp')}>
+              <Link variant="body2" className={classes.interactive} onClick={callBack(USER_STATE.signUp)}>
                 {t('SIGNIN.NO_ACCOUNT')}
               </Link>
             </Grid>
