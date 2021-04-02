@@ -40,11 +40,7 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
     const result = await AuthService.signIn(credentials);
     if (result instanceof Error) {
       setIsPending(false);
-      if (result.response.status === 401) {
-        setError('SIGNIN.WRONG_CREDENTIALS');
-      } else {
-        setError('SIGNUP.SOMETHIG_WENT_WRONG');
-      }
+      setError(result.response.status === 401 ? 'SIGNIN.WRONG_CREDENTIALS' : 'SIGNUP.SOMETHIG_WENT_WRONG');
     } else {
       onSignIn(result.data);
       setIsPending(false);

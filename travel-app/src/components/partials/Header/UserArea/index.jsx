@@ -12,8 +12,9 @@ import { AuthService } from '../../../../services/auth.service';
 
 const UserPanel = ({ type, ...props }) => {
   const { callBack, onClose, onSignIn, user, handleLogout } = props;
-  if (type === 'signIn') return <SignIn {...{ callBack, onClose, onSignIn }} />;
-  if (type === 'signUp') return <SignUp {...{ callBack, onClose, onSignIn }} />;
+  const commonProps = { callBack, onClose, onSignIn }
+  if (type === 'signIn') return <SignIn {...commonProps} />;
+  if (type === 'signUp') return <SignUp {...commonProps} />;
   return <UserLogged {...{user, handleLogout}} />
 };
 
