@@ -6,20 +6,23 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import UserLogged from './UserLogged';
 
+import { USER_STATE } from '../../../../constants/userpanel';
+
 import { UserContext } from '../../../../contexts/UserContext';
 import useStyles from './styles';
 import { AuthService } from '../../../../services/auth.service';
 
 const UserPanel = ({ type, ...props }) => {
   const { callBack, onClose, onSignIn, user, handleLogout } = props;
-  if (type === 'signIn') return <SignIn {...{ callBack, onClose, onSignIn }} />;
-  if (type === 'signUp') return <SignUp {...{ callBack, onClose, onSignIn }} />;
+  const commonProps = { callBack, onClose, onSignIn }
+  if (type === 'signIn') return <SignIn {...commonProps} />;
+  if (type === 'signUp') return <SignUp {...commonProps} />;
   return <UserLogged {...{user, handleLogout}} />
 };
 
 export default function UserArea({closeMenu}) {
   const [user, setUser] = useContext(UserContext);
-  const panelType = (user) ? 'userLogged' : 'signIn';
+  const panelType = (user) ? USER_STATE.userLogged : USER_STATE.signIn;
   const [type, setType] = useState(panelType);
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
   const classes = useStyles();
@@ -40,8 +43,7 @@ export default function UserArea({closeMenu}) {
       }
     };
     checkAuthorization();
-    //eslint-disable-next-line
-  }, []);
+  }, [setUser]);
 
   const handleLogout = () => {
     AuthService.logout();

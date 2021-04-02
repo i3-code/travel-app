@@ -20,7 +20,12 @@ export default function RatingComponent({ average, value, handleBackdrop, getSco
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const scoreColor = (average > 4) ? classes.green : (average > 3) ? classes.yellow : classes.red;
+  const getColor = (average) => {
+    if (average > 4) return classes.green;
+    if (average > 3) return classes.yellow;
+    return classes.red;
+  };
+
   return (
     <Box
       component="fieldset"
@@ -28,7 +33,7 @@ export default function RatingComponent({ average, value, handleBackdrop, getSco
       position="absolute"
       className={classes.rating}
     >
-      <Typography className={scoreColor}>{average}</Typography>
+      <Typography className={getColor(average)}>{average}</Typography>
       <Rating
         name="simple-controlled"
         value={value}

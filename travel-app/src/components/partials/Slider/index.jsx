@@ -36,12 +36,12 @@ export default function SliderComponent(props) {
 
   const getScores = (sightId) => {
     const sightScores = scores[sightId];
-    return (sightScores && sightScores.scores) ? sightScores.scores : [];
+    return sightScores?.scores || [];
   };
 
   const average = (sightId) => {
     const sightScores = scores[sightId];
-    return ( sightScores && sightScores.averageValue) ? sightScores.averageValue : 0;
+    return sightScores?.averageValue || 0;
   };
 
   const value = (sightId) => {

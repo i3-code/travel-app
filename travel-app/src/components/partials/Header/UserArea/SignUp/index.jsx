@@ -19,6 +19,8 @@ import { useTranslation } from 'react-i18next';
 import Loading from '../../../../partials/Loading';
 import { AuthService } from '../../../../../services/auth.service';
 
+import { USER_STATE } from '../../../../../constants/userpanel';
+
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
 
 export default function SignUp({ callBack, onClose, onSignIn }) {
@@ -62,11 +64,7 @@ export default function SignUp({ callBack, onClose, onSignIn }) {
       const response = await AuthService.signUp({ username, password, avatar });
       if (response instanceof Error) {
         setIsPending(false);
-        if (response.response.status === 409) {
-          setSignError('SIGNUP.USER_EXISTS');
-        } else {
-          setSignError('SIGNUP.SOMETHIG_WENT_WRONG');
-        }
+        setSignError(response.response.status === 409 ? 'SIGNUP.USER_EXISTS' : 'SIGNUP.SOMETHIG_WENT_WRONG');
       } else {
         onSignIn(response.data)
         onClose();
@@ -149,7 +147,7 @@ export default function SignUp({ callBack, onClose, onSignIn }) {
           {signError && <Typography className={classes.signError}>{t(signError)}</Typography>}
           <Grid container justify="flex-end">
             <Grid item>
-              <Link variant="body2" className={classes.interactive} onClick={callBack('signIn')}>
+              <Link variant="body2" className={classes.interactive} onClick={callBack(USER_STATE.signIn)}>
                 {t('SIGNUP.HAVE_ACCOUNT')}
               </Link>
             </Grid>

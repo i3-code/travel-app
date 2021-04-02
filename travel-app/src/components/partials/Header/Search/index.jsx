@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import useStyles from './styles';
 
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,8 @@ import ClearIcon from '@material-ui/icons/Clear';
 import MicOffIcon from '@material-ui/icons/MicOff';
 import MicIcon from '@material-ui/icons/Mic';
 
-export default function Search({value, onChange, onSearch, closeMenu, recorder, toggleRecorder }) {
+export default function Search({value, onChange, onSearch, recorder, toggleRecorder }) {
+  const inputRef = useRef(null)
   const classes = useStyles();
 
   const { t, i18n } = useTranslation();
@@ -24,7 +25,6 @@ export default function Search({value, onChange, onSearch, closeMenu, recorder, 
   const enter=(e) => {
     if (e.keyCode === 13) {
       e.target.blur();
-      closeMenu(e)
     }
   }
 
@@ -55,10 +55,10 @@ export default function Search({value, onChange, onSearch, closeMenu, recorder, 
 
   const toggleMicro=() => {
     if(!recorder) {
-      speechRecognitionFunc()
-      document.querySelector('input').focus()
+      speechRecognitionFunc();
+      inputRef.current.focus();
     }
-    toggleRecorder(!recorder)
+    toggleRecorder(prev => !prev);
   }
 
   return (
@@ -67,11 +67,12 @@ export default function Search({value, onChange, onSearch, closeMenu, recorder, 
         aria-label="search"
         color="inherit"
         className={classes.searchIcon}
-        onClick={(e)=> {e.target.blur(); closeMenu(e)}}
+        onClick={e => e.target.blur()}
       >
         <SearchIcon />
       </IconButton>
       <InputBase
+        ref={inputRef}
         autoFocus
         autoComplete={'off'}
         placeholder={t('PAGE_PLACEHOLDER.SEARCH')}

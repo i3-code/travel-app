@@ -4,4 +4,5 @@ export const LANGUAGES = [
   { type: 'de-DE', label: 'Deutsche', short: 'de' },
 ];
 
+export const DEFAULT_APP_LANG = 'en-US';
 export const DEFAULT_DB_LANG = 'en';

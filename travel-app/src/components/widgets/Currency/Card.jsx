@@ -12,6 +12,21 @@ import usaIcon from '../../../assets/images/usa.png';
 import ecIcon from '../../../assets/images/ecIcon.png';
 import rubIcon from '../../../assets/images/rubIcon.png';
 import useStyles from './styles';
+
+const currLanguages = {
+  'ru-RU': {
+    USD: 'долл. США',
+    EUR: 'ЕВРО',
+    RUB: 'pocc. руб.',
+
+  },
+  'de-DE': {
+    USD: 'US Dollar',
+    EUR: 'EUR',
+    RUB: 'REIBEN',
+  }
+};
+
 const CurrencyCard = ({ currencyData, currencyCode, lang }) => {
   const classes = useStyles();
   return !currencyData ? (
@@ -23,18 +38,7 @@ const CurrencyCard = ({ currencyData, currencyCode, lang }) => {
         1 {currencyCode}
         </Grid>
         {currencyData.map((el, i) => {
-          let currencyLang = '';
-          if (lang === 'ru-RU') {
-            if (el.key === 'USD') currencyLang = 'долл. США';
-            if (el.key === 'EUR') currencyLang = 'ЕВРО';
-            if (el.key === 'RUB') currencyLang = 'pocc. руб.';
-          }
-          if (lang === 'de-DE') {
-            if (el.key === 'USD') currencyLang = 'US Dollar';
-            if (el.key === 'EUR') currencyLang = 'EUR';
-            if (el.key === 'RUB') currencyLang = 'REIBEN';
-          }
-          if (lang === 'en-US') currencyLang = el.key;
+          const currencyLang = (lang === 'en-US') ? el.key : currLanguages[lang][el.key];
           return (
             <List key={i} style={{ padding: '0'}}>
               <ListItem style={{padding:'0', marginLeft:'1vw'}}>

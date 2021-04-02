@@ -23,15 +23,11 @@ export default function App() {
           <Router>
             <div>
               <Switch>
-                <Route exact path="/">
-                  <Home />
-                </Route>
+                <Route exact path="/" component={Home} />
                 <Route path="/country">
                   <Route path="/country/:code" render={(props) => <Country {...props} />} />
                 </Route>
-                <Route path="*">
-                  <ErrorPage />
-                </Route>
+                <Route path="*" component={ErrorPage} />
               </Switch>
             </div>
           </Router>
